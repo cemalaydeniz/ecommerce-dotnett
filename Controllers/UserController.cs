@@ -79,7 +79,7 @@ namespace ecommerce_dotnet.Controllers
         }
 
         [Authorize]
-        [HttpPost("update-profile")]
+        [HttpPut("update-profile")]
         public async Task<IActionResult> UpdateProfile([FromBody]ProfileModel profileModel)
         {
             if (profileModel == null)
