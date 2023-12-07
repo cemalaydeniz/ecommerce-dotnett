@@ -32,6 +32,7 @@
             public static class Product
             {
                 public const string NewProduct = "The product has been added";
+                public const string ProductNotFound = "The product not found";
             }
         }
 

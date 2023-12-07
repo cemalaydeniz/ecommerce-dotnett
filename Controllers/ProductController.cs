@@ -35,5 +35,18 @@ namespace ecommerce_dotnet.Controllers
 
             return StatusCode((int)HttpStatusCode.Created, JsonResponse.Success(Constants.Response.Product.NewProduct));
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProduct(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            Product? product = await _productService.FindAsync(id);
+            if (product == null)
+                return BadRequest(JsonResponse.Error(Constants.Response.Product.ProductNotFound));
+
+            return Ok(JsonResponse.Data(true, product));
+        }
     }
 }
