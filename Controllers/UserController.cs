@@ -68,5 +68,13 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Success(Constants.Response.User.LoggedIn));
         }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Ok(JsonResponse.Success(Constants.Response.User.LoggedOut));
+        }
     }
 }

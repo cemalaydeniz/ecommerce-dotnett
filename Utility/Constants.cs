@@ -23,6 +23,7 @@
 
                 public const string WrongPassword = "The password you have entered is wrong";
                 public const string LoggedIn = "You have successfully logged in";
+                public const string LoggedOut = "You have successfully logged out";
             }
         }
     }
