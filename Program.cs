@@ -1,6 +1,8 @@
 using ecommerce_dotnet.Data;
 using ecommerce_dotnet.Middlewares;
 using ecommerce_dotnet.Models;
+using ecommerce_dotnet.Services.Implementation;
+using ecommerce_dotnet.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +25,7 @@ builder.Services.AddIdentity<User, Role>(_ =>
 }).AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddScoped<IProductService, ProductService>();
 //~ End
 
 var app = builder.Build();

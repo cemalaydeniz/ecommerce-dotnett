@@ -28,6 +28,19 @@
                 public const string ProfileNoChange = "No profile changes were made";
                 public const string ProfileUpdated = "The profile has been updated";
             }
+
+            public static class Product
+            {
+                public const string NewProduct = "The product has been added";
+            }
+        }
+
+        public static class Exception
+        {
+            public static class Product
+            {
+                public const string NotFound = "The product not found";
+            }
         }
     }
 }
