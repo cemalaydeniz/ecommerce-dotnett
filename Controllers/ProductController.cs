@@ -71,5 +71,17 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Success(Constants.Response.Product.ProductUpdated));
         }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            await _productService.RemoveAsync(id);
+
+            return Ok(JsonResponse.Success(Constants.Response.Product.ProductDeleted));
+        }
     }
 }
