@@ -125,5 +125,17 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Success(Constants.Response.Product.BulkEdit));
         }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpDelete("bulk-delete")]
+        public async Task<IActionResult> BulkDelete([FromBody]List<string> ids)
+        {
+            if (ids == null || ids.Count == 0)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            await _productService.BulkRemoveAsync(ids);
+
+            return Ok(JsonResponse.Success(Constants.Response.Product.BulkDelete));
+        }
     }
 }

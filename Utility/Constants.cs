@@ -39,6 +39,7 @@
 
                 public const string BulkAdd = "The bulk addition has been completed successfully";
                 public const string BulkEdit = "The bulk edit has been completed successfully";
+                public const string BulkDelete = "The bulk deletion has been completed successfully";
             }
         }
 
