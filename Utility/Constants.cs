@@ -24,6 +24,9 @@
                 public const string WrongPassword = "The password you have entered is wrong";
                 public const string LoggedIn = "You have successfully logged in";
                 public const string LoggedOut = "You have successfully logged out";
+
+                public const string ProfileNoChange = "No profile changes were made";
+                public const string ProfileUpdated = "The profile has been updated";
             }
         }
     }

@@ -1,10 +1,11 @@
 ﻿using ecommerce_dotnet.DTOs.User;
 using ecommerce_dotnet.Models;
 using ecommerce_dotnet.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Net;
+using System.Security.Claims;
 
 namespace ecommerce_dotnet.Controllers
 {
@@ -75,6 +76,35 @@ namespace ecommerce_dotnet.Controllers
             await _signInManager.SignOutAsync();
 
             return Ok(JsonResponse.Success(Constants.Response.User.LoggedOut));
+        }
+
+        [Authorize]
+        [HttpPost("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody]ProfileModel profileModel)
+        {
+            if (profileModel == null)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            if (profileModel.Name == null && profileModel.PhoneNumber == null && profileModel.Address == null)
+                return Ok(JsonResponse.Success(Constants.Response.User.ProfileNoChange));
+
+            User? user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Name)?.Value);
+            if (user == null)
+                return NotFound(JsonResponse.Error(Constants.Response.User.UserNotFound));
+
+            if (profileModel.Name != null) user.Name = profileModel.Name;
+            if (profileModel.PhoneNumber != null) user.PhoneNumber = profileModel.PhoneNumber;
+            if (profileModel.Address != null) user.Address = profileModel.Address;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(_ => _.Description);
+
+                return BadRequest(JsonResponse.Error(string.Join(", ", errors)));
+            }
+
+            return Ok(JsonResponse.Success(Constants.Response.User.ProfileUpdated));
         }
     }
 }
