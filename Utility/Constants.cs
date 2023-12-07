@@ -13,6 +13,12 @@
             public static class General
             {
                 public const string InternalServerError = "Internal Server Error";
+                public const string BadRequest = "Bad Request";
+            }
+
+            public static class User
+            {
+                public const string UserCreated = "The user has been created";
             }
         }
     }
