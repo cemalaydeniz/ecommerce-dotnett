@@ -19,6 +19,10 @@
             public static class User
             {
                 public const string UserCreated = "The user has been created";
+                public const string UserNotFound = "The user not found";
+
+                public const string WrongPassword = "The password you have entered is wrong";
+                public const string LoggedIn = "You have successfully logged in";
             }
         }
     }
