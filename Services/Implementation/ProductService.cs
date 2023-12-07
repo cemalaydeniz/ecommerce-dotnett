@@ -48,7 +48,7 @@ namespace ecommerce_dotnet.Services.Implementation
         {
             Product? product = await FindAsync(id);
             if (product == null)
-                throw new ProductNotFoundException(Constants.Exception.Product.NotFound);
+                throw new ProductNotFoundException(Constants.Exception.ProductNotFound);
 
             await RemoveAsync(product);
         }
@@ -75,7 +75,7 @@ namespace ecommerce_dotnet.Services.Implementation
         {
             List<Product> products = await FindAllAsync(_ => ids.Contains(_.Id));
             if (products == null || products.Count == 0)
-                throw new ProductNotFoundException(Constants.Exception.Product.NotFound);
+                throw new ProductNotFoundException(Constants.Exception.ProductNotFound);
 
             await BulkRemoveAsync(products);
         }
@@ -84,6 +84,20 @@ namespace ecommerce_dotnet.Services.Implementation
         {
             products.ForEach(_ => _.IsDeleted = true);
             await BulkEditAsync(products);
+        }
+
+        public async Task<List<Product>> SearchByNameAsync(string name, int page, int pageSize, bool includeDeleted = false)
+        {
+            if (page < 1 || pageSize < 0)
+                throw new PageOutofRange(Constants.Exception.PageOutofRange);
+
+            IQueryable<Product> query = _dbContext.Products.Where(_ => EF.Functions.Like(_.Name, $"%{name}%"));     // % is required for MySQL
+            if (!includeDeleted)
+            {
+                query = query.Where(_ => !_.IsDeleted);
+            }
+
+            return await query.OrderBy(_ => _.Name).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
     }
 }

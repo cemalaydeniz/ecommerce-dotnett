@@ -45,10 +45,9 @@
 
         public static class Exception
         {
-            public static class Product
-            {
-                public const string NotFound = "The product not found";
-            }
+            public const string PageOutofRange = "Wrong page or page size";
+
+            public const string ProductNotFound = "The product not found";
         }
     }
 }

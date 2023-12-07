@@ -17,5 +17,7 @@ namespace ecommerce_dotnet.Services.Interfaces
         Task BulkEditAsync(List<Product> products);
         Task BulkRemoveAsync(List<string> ids);
         Task BulkRemoveAsync(List<Product> products);
+
+        Task<List<Product>> SearchByNameAsync(string name, int page, int pageSize, bool includeDeleted = false);
     }
 }

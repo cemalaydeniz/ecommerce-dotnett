@@ -137,5 +137,16 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Success(Constants.Response.Product.BulkDelete));
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery]string name, [FromQuery]int page, [FromQuery]bool includeDeleted)
+        {
+            if (string.IsNullOrEmpty(name) || page < 0)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            List<Product> result = await _productService.SearchByNameAsync(name, page, 10, includeDeleted);       // The page size can also be an enum and obtained from the user
+
+            return Ok(JsonResponse.Data(true, result));
+        }
     }
 }
