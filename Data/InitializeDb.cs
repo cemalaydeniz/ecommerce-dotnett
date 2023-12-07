@@ -1,4 +1,5 @@
 ﻿using ecommerce_dotnet.Models;
+using ecommerce_dotnet.Utility;
 using Microsoft.AspNetCore.Identity;
 
 namespace ecommerce_dotnet.Data
@@ -21,8 +22,8 @@ namespace ecommerce_dotnet.Data
 
                 var initialRoles = new[]
                 {
-                    new Role() { Name = "user" },
-                    new Role() { Name = "admin" }
+                    new Role() { Name = Constants.Roles.User },
+                    new Role() { Name = Constants.Roles.Admin }
                     // More roles can be added here
                 };
 
