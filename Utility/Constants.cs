@@ -38,6 +38,7 @@
                 public const string ProductDeleted = "The product has been deleted";
 
                 public const string BulkAdd = "The bulk addition has been completed successfully";
+                public const string BulkEdit = "The bulk edit has been completed successfully";
             }
         }
 

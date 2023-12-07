@@ -98,5 +98,32 @@ namespace ecommerce_dotnet.Controllers
 
             return StatusCode((int)HttpStatusCode.Created, JsonResponse.Success(Constants.Response.Product.BulkAdd));
         }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpPut("bulk-edit")]
+        public async Task<IActionResult> BulkEdit([FromBody]BulkEditProductModel bulkEditProductModel)
+        {
+            if (bulkEditProductModel == null || bulkEditProductModel.Products == null || bulkEditProductModel.Products.Count == 0)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            // In order to update only the desired data
+            List<Product> products = new List<Product>();
+            foreach (var item in bulkEditProductModel.Products)
+            {
+                Product? product = await _productService.FindAsync(item.Id);
+                if (product == null)
+                    return BadRequest(JsonResponse.Error(Constants.Response.Product.ProductNotFound));
+
+                if (item.Name != null) product.Name = item.Name;
+                if (item.Price != null) product.Price = item.Price.Value;
+                if (item.Description != null) product.Description = item.Description;
+
+                products.Add(product);
+            }
+
+            await _productService.BulkEditAsync(products);
+
+            return Ok(JsonResponse.Success(Constants.Response.Product.BulkEdit));
+        }
     }
 }
