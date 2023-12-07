@@ -1,4 +1,5 @@
-﻿using ecommerce_dotnet.DTOs.Product;
+﻿using AutoMapper;
+using ecommerce_dotnet.DTOs.Product;
 using ecommerce_dotnet.Models;
 using ecommerce_dotnet.Services.Interfaces;
 using ecommerce_dotnet.Utility;
@@ -13,10 +14,12 @@ namespace ecommerce_dotnet.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IMapper _mapper;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [Authorize(Roles = Constants.Roles.Admin)]
@@ -82,6 +85,18 @@ namespace ecommerce_dotnet.Controllers
             await _productService.RemoveAsync(id);
 
             return Ok(JsonResponse.Success(Constants.Response.Product.ProductDeleted));
+        }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpPost("bulk-add")]
+        public async Task<IActionResult> BulkAdd([FromBody]BulkAddProductModel bulkAddProductModel)
+        {
+            if (bulkAddProductModel == null || bulkAddProductModel.Products == null || bulkAddProductModel.Products.Count == 0)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+        
+            await _productService.BulkAddAsync(_mapper.Map<List<Product>>(bulkAddProductModel.Products));
+
+            return StatusCode((int)HttpStatusCode.Created, JsonResponse.Success(Constants.Response.Product.BulkAdd));
         }
     }
 }

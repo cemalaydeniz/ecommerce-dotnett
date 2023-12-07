@@ -58,5 +58,32 @@ namespace ecommerce_dotnet.Services.Implementation
             product.IsDeleted = true;
             await UpdateAsync(product);
         }
+
+        public async Task BulkAddAsync(List<Product> products)
+        {
+            _dbContext.Products.AddRange(products);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task BulkEditAsync(List<Product> products)
+        {
+            _dbContext.Products.UpdateRange(products);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task BulkRemoveAsync(List<string> ids)
+        {
+            List<Product> products = await FindAllAsync(_ => ids.Contains(_.Id));
+            if (products == null || products.Count == 0)
+                throw new ProductNotFoundException(Constants.Exception.Product.NotFound);
+
+            await BulkRemoveAsync(products);
+        }
+
+        public async Task BulkRemoveAsync(List<Product> products)
+        {
+            products.ForEach(_ => _.IsDeleted = true);
+            await BulkEditAsync(products);
+        }
     }
 }

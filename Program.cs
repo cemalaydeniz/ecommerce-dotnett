@@ -1,4 +1,6 @@
+using AutoMapper;
 using ecommerce_dotnet.Data;
+using ecommerce_dotnet.Mappings;
 using ecommerce_dotnet.Middlewares;
 using ecommerce_dotnet.Models;
 using ecommerce_dotnet.Services.Implementation;
@@ -6,6 +8,11 @@ using ecommerce_dotnet.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var autoMapper = new MapperConfiguration(_ =>
+{
+    _.AddProfile(new ProductMapping());
+});
 
 //~ Begin - Services
 builder.Services.AddControllers();
@@ -26,6 +33,7 @@ builder.Services.AddIdentity<User, Role>(_ =>
 
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddSingleton(autoMapper.CreateMapper());
 //~ End
 
 var app = builder.Build();

@@ -36,6 +36,8 @@
                 public const string ProductNoChange = "No changes were made";
                 public const string ProductUpdated = "The product has been updated";
                 public const string ProductDeleted = "The product has been deleted";
+
+                public const string BulkAdd = "The bulk addition has been completed successfully";
             }
         }
 

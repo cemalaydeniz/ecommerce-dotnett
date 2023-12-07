@@ -12,5 +12,10 @@ namespace ecommerce_dotnet.Services.Interfaces
         Task<List<Product>> GetAllAsync();
         Task RemoveAsync(string id);
         Task RemoveAsync(Product product);
+
+        Task BulkAddAsync(List<Product> products);
+        Task BulkEditAsync(List<Product> products);
+        Task BulkRemoveAsync(List<string> ids);
+        Task BulkRemoveAsync(List<Product> products);
     }
 }
