@@ -1,4 +1,5 @@
 using ecommerce_dotnet.Data;
+using ecommerce_dotnet.Middlewares;
 using ecommerce_dotnet.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<InternalErrorHandler>();
+
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
