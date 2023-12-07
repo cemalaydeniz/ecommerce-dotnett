@@ -48,5 +48,28 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Data(true, product));
         }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(string id, [FromBody]UpdateProductModel updateProductModel)
+        {
+            if (string.IsNullOrEmpty(id) || updateProductModel == null)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.BadRequest));
+
+            if (updateProductModel.Name == null && updateProductModel.Price == null && updateProductModel.Description == null)
+                return Ok(JsonResponse.Success(Constants.Response.Product.ProductNoChange));
+
+            Product? product = await _productService.FindAsync(id);
+            if (product == null)
+                return BadRequest(JsonResponse.Error(Constants.Response.Product.ProductNotFound));
+
+            if (updateProductModel.Name != null) product.Name = updateProductModel.Name;
+            if (updateProductModel.Price != null) product.Price = updateProductModel.Price.Value;
+            if (updateProductModel.Description != null) product.Description = updateProductModel.Description;
+
+            await _productService.UpdateAsync(product);
+
+            return Ok(JsonResponse.Success(Constants.Response.Product.ProductUpdated));
+        }
     }
 }

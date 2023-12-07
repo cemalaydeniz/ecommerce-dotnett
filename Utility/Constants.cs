@@ -33,6 +33,8 @@
             {
                 public const string NewProduct = "The product has been added";
                 public const string ProductNotFound = "The product not found";
+                public const string ProductNoChange = "No changes were made";
+                public const string ProductUpdated = "The product has been updated";
             }
         }
 
