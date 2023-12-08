@@ -42,6 +42,11 @@
                 public const string BulkEdit = "The bulk edit has been completed successfully";
                 public const string BulkDelete = "The bulk deletion has been completed successfully";
             }
+
+            public static class CustomerSupport
+            {
+                public const string TicketCreated = "The ticket has been created";
+            }
         }
 
         public static class Exception
@@ -49,6 +54,7 @@
             public const string PageOutofRange = "Wrong page or page size";
 
             public const string ProductNotFound = "The product not found";
+            public const string OrderNotFound = "The order not found";
         }
     }
 }

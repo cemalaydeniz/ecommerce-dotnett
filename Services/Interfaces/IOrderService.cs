@@ -10,5 +10,8 @@ namespace ecommerce_dotnet.Services.Interfaces
         Task<List<Order>> FindAllAsync(Expression<Func<Order, bool>> query);
 
         Task BulkAddAsync(List<Order> orders);
+
+        Task AddTicketAsync(Order order, CustomerSupport ticket);
+        Task AddTicketAsync(string orderId, CustomerSupport ticket);
     }
 }
