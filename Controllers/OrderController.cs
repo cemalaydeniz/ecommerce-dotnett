@@ -16,15 +16,19 @@ namespace ecommerce_dotnet.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
+        private readonly IConfiguration _configuration;
 
-        public OrderController(UserManager<User> userManager, IProductService productService)
+        public OrderController(UserManager<User> userManager, IProductService productService, IOrderService orderService, IConfiguration configuration)
         {
             _userManager = userManager;
             _productService = productService;
+            _orderService = orderService;
+            _configuration = configuration;
         }
 
         [Authorize]
-        [HttpPost("payment/{productId}")]
+        [HttpPost("payment")]
         public async Task<IActionResult> Pay([FromBody]CartModel cartModel)
         {
             if (cartModel == null || cartModel.Items.Count == 0)
@@ -52,6 +56,36 @@ namespace ecommerce_dotnet.Controllers
             });
 
             return Ok(JsonResponse.Data(true, paymentIntent.ClientSecret));
+        }
+
+        [HttpPost("payment/webhook")]
+        public async Task<IActionResult> PaymentCheck()
+        {
+            string endpointSecret = _configuration["StripeSecret"];
+
+            var requestBody = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+            var signatureHeader = Request.Headers["Stripe-Signature"];
+            var stripeEvent = Stripe.EventUtility.ConstructEvent(requestBody, signatureHeader, endpointSecret);
+
+            if (stripeEvent.Type == Stripe.Events.PaymentIntentSucceeded)
+            {
+                var paymentIntent = (Stripe.PaymentIntent)stripeEvent.Data.Object;
+
+                List<Order> orders = new List<Order>();
+                foreach (var item in paymentIntent.Metadata)
+                {
+                    orders.Add(new Order()
+                    {
+                        UserId = paymentIntent.CustomerId,
+                        ProductId = item.Key,
+                        Quantity = int.Parse(item.Value)
+                    });
+                }
+
+                await _orderService.BulkAddAsync(orders);
+            }
+
+            return Ok();
         }
     }
 }
