@@ -20,7 +20,7 @@ namespace ecommerce_dotnet.Models
         public string ProductId { get; set; } = null!;
         public virtual Product Product { get; set; } = null!;
 
-        public string CustomerSupportId { get; set; } = null!;
-        public virtual CustomerSupport CustomerSupport { get; set; } = null!;
+        public string? CustomerSupportId { get; set; } = null!;
+        public virtual CustomerSupport? CustomerSupport { get; set; } = null!;
     }
 }

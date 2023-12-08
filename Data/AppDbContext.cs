@@ -33,12 +33,14 @@ namespace ecommerce_dotnet.Data
                 .HasOne(_ => _.CustomerSupport)
                 .WithOne(_ => _.Order)
                 .HasForeignKey<CustomerSupport>(_ => _.OrderId);
+                //.IsRequired(false);
 
             // Foreign keys of CustomerSupport
             builder.Entity<CustomerSupport>()
                 .HasOne(_ => _.Order)
                 .WithOne(_ => _.CustomerSupport)
                 .HasForeignKey<Order>(_ => _.CustomerSupportId);
+                //.IsRequired(false);
             builder.Entity<CustomerSupport>()
                 .HasMany(_ => _.Messages)
                 .WithOne(_ => _.CustomerSupport)
