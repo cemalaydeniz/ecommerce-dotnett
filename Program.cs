@@ -34,6 +34,7 @@ builder.Services.AddIdentity<User, Role>(_ =>
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ICustomerSupportService, CustomerSupportService>();
 builder.Services.AddSingleton(autoMapper.CreateMapper());
 //~ End
 

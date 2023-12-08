@@ -15,10 +15,12 @@ namespace ecommerce_dotnet.Controllers
     public class CustomerSupportController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly ICustomerSupportService _customerSupportService;
 
-        public CustomerSupportController(IOrderService orderService)
+        public CustomerSupportController(IOrderService orderService, ICustomerSupportService customerSupportService)
         {
             _orderService = orderService;
+            _customerSupportService = customerSupportService;
         }
 
         [HttpPost("new/{orderId}")]
@@ -42,6 +44,30 @@ namespace ecommerce_dotnet.Controllers
             });
 
             return StatusCode((int)HttpStatusCode.Created, JsonResponse.Success(Constants.Response.CustomerSupport.TicketCreated));
+        }
+
+        [HttpPost("reply/{ticketId}")]
+        public async Task<IActionResult> NewMessage(string ticketId, [FromBody]TicketModel ticketModel)
+        {
+            string? email = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (email == null)
+                return BadRequest(JsonResponse.Error(Constants.Response.General.Unauthorized));
+
+            CustomerSupport? ticket = await _customerSupportService.FindAsync(ticketId);
+            if (ticket == null)
+                return NotFound(JsonResponse.Error(Constants.Response.CustomerSupport.TicketNotFound));
+
+            // Only the owner of the ticket or the admins can reply to the ticket
+            if (ticket.Messages.ElementAt(0).Email != email && !User.IsInRole(Constants.Roles.Admin))
+                return BadRequest(JsonResponse.Error(Constants.Response.General.Unauthorized));
+
+            await _customerSupportService.AddMessageAsync(ticket, new Message()
+            {
+                Email = email,
+                Content = ticketModel.Message
+            });
+
+            return Ok(JsonResponse.Success(Constants.Response.CustomerSupport.MessageSent));
         }
     }
 }

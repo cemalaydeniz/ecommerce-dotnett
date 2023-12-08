@@ -46,6 +46,8 @@
             public static class CustomerSupport
             {
                 public const string TicketCreated = "The ticket has been created";
+                public const string TicketNotFound = "The ticket not found";
+                public const string MessageSent = "The message has been sent";
             }
         }
 
@@ -55,6 +57,8 @@
 
             public const string ProductNotFound = "The product not found";
             public const string OrderNotFound = "The order not found";
+            public const string TicketNotFound = "The ticket not found";
+            public const string TicketClosed = "The ticket is already closed";
         }
     }
 }
