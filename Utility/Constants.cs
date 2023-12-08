@@ -14,6 +14,7 @@
             {
                 public const string InternalServerError = "Internal Server Error";
                 public const string BadRequest = "Bad Request";
+                public const string Unauthorized = "Unauthorized";
             }
 
             public static class User
