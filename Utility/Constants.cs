@@ -47,6 +47,7 @@
             {
                 public const string TicketCreated = "The ticket has been created";
                 public const string TicketNotFound = "The ticket not found";
+                public const string TicketClosed = "The ticket has been closed";
                 public const string MessageSent = "The message has been sent";
             }
         }

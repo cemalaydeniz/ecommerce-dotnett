@@ -69,5 +69,14 @@ namespace ecommerce_dotnet.Controllers
 
             return Ok(JsonResponse.Success(Constants.Response.CustomerSupport.MessageSent));
         }
+
+        [Authorize(Roles = Constants.Roles.Admin)]
+        [HttpDelete("close/{ticketId}")]
+        public async Task<IActionResult> CloseTicket(string ticketId)
+        {
+            await _customerSupportService.CloseTicket(ticketId);
+
+            return Ok(JsonResponse.Success(Constants.Response.CustomerSupport.TicketClosed));
+        }
     }
 }
