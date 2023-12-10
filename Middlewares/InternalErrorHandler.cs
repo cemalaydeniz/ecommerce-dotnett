@@ -4,6 +4,9 @@ using System.Text.Json;
 
 namespace ecommerce_dotnet.Middlewares
 {
+    /// <summary>
+    /// It handles internal server errors and logs them in detail.
+    /// </summary>
     public class InternalErrorHandler
     {
         private readonly RequestDelegate _next;

@@ -49,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// It automatically handles all internal server errors
 app.UseMiddleware<InternalErrorHandler>();
 
 app.UseHttpsRedirection();
